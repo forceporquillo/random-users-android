@@ -72,6 +72,8 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    debugImplementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.compose.material)
 
     testImplementation(libs.junit)
@@ -82,6 +84,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
 
     implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)

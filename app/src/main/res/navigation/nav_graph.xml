@@ -27,6 +27,15 @@
     <fragment
         android:id="@+id/compose"
         android:name="dev.forcecodes.albertsons.randomuser.presentation.compose.ComposeFragment"
-        android:label="Compose" />
+        android:label="Compose" >
+        <action
+            android:id="@+id/action_compose_to_detailsCompose"
+            app:destination="@id/detailsCompose" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsCompose"
+        android:name="dev.forcecodes.albertsons.randomuser.presentation.compose.details.DetailsComposeFragment"
+        android:label="Person" />
 
 </navigation>

@@ -45,13 +45,13 @@ class DashboardFragment : Fragment(R.layout.fragment_conventional_xml) {
 
         binding.recyclerView.adapter = adapter
     }
-
-    // could be nav safe args
-    private fun UserSimpleInfo.toBundle() =
-        bundleOf(
-            UserArgsKey.USER_ID to id,
-            UserArgsKey.FULL_NAME to fullName,
-            UserArgsKey.THUMBNAIL to thumbnailUrl,
-            UserArgsKey.EMAIL to email,
-        )
 }
+
+// could be nav safe args
+fun UserSimpleInfo.toBundle() =
+    bundleOf(
+        UserArgsKey.USER_ID to id,
+        UserArgsKey.FULL_NAME to fullName,
+        UserArgsKey.THUMBNAIL to thumbnailUrl,
+        UserArgsKey.EMAIL to email,
+    )
