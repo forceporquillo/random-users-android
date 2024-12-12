@@ -30,52 +30,69 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
 
+    private var _binding: ActivityMainBinding? = null
+    private val binding: ActivityMainBinding get() = _binding!!
+
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private val themeViewModel: ThemeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        _binding = ActivityMainBinding.inflate(layoutInflater)
+
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
+        setupNavigation()
+        setupTheme(savedInstanceState)
+        setupFragmentResultListener()
+        setupFabClickListener()
+        observeThemeChanges()
+        handleDestinationChanges(binding)
+    }
+
+    private fun setupNavigation() {
         navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val topLevelDestinations = setOf(R.id.xml, R.id.compose)
+        appBarConfiguration = AppBarConfiguration(topLevelDestinations)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
-
         binding.bottomNav.setupWithNavController(navController)
 
         supportActionBar?.setHomeButtonEnabled(true)
+    }
 
-        currentTheme?.let {
-            when {
-                savedInstanceState == null -> {
-                    updateForTheme(it)
-                }
-                themeViewModel.currentTheme == it -> {
-                    updateForTheme(it)
-                }
+    private fun setupTheme(savedInstanceState: Bundle?) {
+        currentTheme?.let { theme ->
+            if (savedInstanceState == null || themeViewModel.currentTheme == theme) {
+                updateForTheme(theme)
             }
         }
+    }
 
+    private fun setupFragmentResultListener() {
         supportFragmentManager.setFragmentResultListener(MAX_USER_LIMIT_KEY, this) { requestKey, result ->
             if (requestKey == MAX_USER_LIMIT_KEY) {
                 dashboardViewModel.fetchSize.value = result.getInt(LIMIT_SIZE)
             }
         }
+    }
 
+    private fun setupFabClickListener() {
         binding.fab.setOnClickListener {
             val currentLimitSize = dashboardViewModel.fetchSize.value
             SliderDialogFragment.newInstance(currentLimitSize)
                 .show(supportFragmentManager, "slider_dialog")
         }
+    }
 
+    private fun observeThemeChanges() {
         repeatOnLifecycle {
             themeViewModel.theme
-                .onEach {
-                    binding.toggle.isOn = it == Theme.LIGHT || !isInDarkMode()
+                .onEach { theme ->
+                    binding.toggle.isOn = theme == Theme.LIGHT || !isInDarkMode()
                 }
                 .debounce(500L)
                 .collect {
@@ -83,16 +100,20 @@ class MainActivity : AppCompatActivity() {
                 }
         }
 
-        binding.toggle.setOnToggledListener { v, isOn ->
+        binding.toggle.setOnToggledListener { view, isOn ->
             themeViewModel.setTheme(isOn)
-            v.isOn = !isOn
+            view.isOn = !isOn
         }
+    }
+
+    private fun handleDestinationChanges(binding: ActivityMainBinding) {
+        val topLevelDestinations = setOf(R.id.xml, R.id.compose)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            val isDetailsScreen = destination.id != R.id.detailsFragment
-            binding.fab.isVisible = isDetailsScreen
-            binding.bottomNav.isVisible = isDetailsScreen
-            binding.toggle.isVisible = isDetailsScreen
+            val isTopLevel = topLevelDestinations.contains(destination.id)
+            binding.fab.isVisible = isTopLevel
+            binding.bottomNav.isVisible = isTopLevel
+            binding.toggle.isVisible = isTopLevel
         }
     }
 
@@ -110,4 +131,9 @@ class MainActivity : AppCompatActivity() {
             @Suppress("deprecation")
             return intent.extras?.getSerializable("theme") as? Theme
         }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }
