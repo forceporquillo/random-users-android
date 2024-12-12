@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/xml">
+
+    <fragment
+        android:id="@+id/xml"
+        android:name="dev.forcecodes.albertsons.randomuser.presentation.view.DashboardFragment"
+        android:label="Random Users"
+        tools:layout="@layout/fragment_conventional_xml" >
+
+        <action
+            android:id="@+id/action_xml_to_compose"
+            app:destination="@id/detailsFragment" />
+
+    </fragment>
+
+    <fragment
+        app:route="details"
+        android:id="@+id/detailsFragment"
+        android:name="dev.forcecodes.albertsons.randomuser.presentation.view.details.DetailsFragment"
+        android:label="Person"
+        tools:layout="@layout/fragment_user_details"/>
+
+    <fragment
+        android:id="@+id/compose"
+        android:name="dev.forcecodes.albertsons.randomuser.presentation.compose.ComposeFragment"
+        android:label="Compose" />
+
+</navigation>

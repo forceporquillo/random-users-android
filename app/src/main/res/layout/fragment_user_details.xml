@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="fullName"
+            type="String" />
+        <variable
+            name="email"
+            type="String" />
+        <variable
+            name="thumbnail"
+            type="String" />
+    </data>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/spacing_large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_start"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/spacing_normal" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline_end"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/spacing_normal" />
+
+            <Space
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                android:id="@+id/spacer"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_large"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profile_card_container"
+                app:layout_constraintTop_toBottomOf="@id/spacer"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:cardCornerRadius="360dp">
+
+                <ImageView
+                    android:id="@+id/user_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    loadImage="@{thumbnail}"
+                    tools:src="@tools:sample/avatars"/>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/full_name_text"
+                android:textStyle="bold"
+                style="@style/TextAppearance.Material3.HeadlineSmall"
+                android:layout_marginTop="@dimen/spacing_large"
+                app:layout_constraintStart_toStartOf="@id/profile_card_container"
+                app:layout_constraintEnd_toEndOf="@id/profile_card_container"
+                app:layout_constraintTop_toBottomOf="@id/profile_card_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Coskun Erdogan"
+                android:text="@{fullName}"/>
+
+            <TextView
+                android:id="@+id/email_text"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/profile_card_container"
+                app:layout_constraintEnd_toEndOf="@id/profile_card_container"
+                app:layout_constraintTop_toBottomOf="@id/full_name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{email}"
+                tools:text="coskun.erdogan@example.com"/>
+
+            <TextView
+                android:layout_marginTop="@dimen/spacing_large"
+                android:id="@+id/info_card"
+                app:layout_constraintTop_toBottomOf="@id/email_text"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/details_personal_information"/>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/personal_info_card_container"
+                app:strokeWidth="1px"
+                android:layout_marginTop="@dimen/spacing_small"
+                app:layout_constraintTop_toBottomOf="@id/info_card"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/personal_info_container"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:id="@+id/account_info_title"
+                app:layout_constraintTop_toBottomOf="@id/personal_info_card_container"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/details_account_information"/>
+
+            <com.google.android.material.card.MaterialCardView
+                app:strokeWidth="1px"
+                android:layout_marginTop="@dimen/spacing_small"
+                app:layout_constraintTop_toBottomOf="@id/account_info_title"
+                app:layout_constraintStart_toStartOf="@id/guideline_start"
+                app:layout_constraintEnd_toEndOf="@id/guideline_end"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/account_info_container"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:visibility="visible"
+        tools:visibility="gone"
+        android:id="@+id/loading_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?android:windowBackground">
+
+        <ProgressBar
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+</FrameLayout>
+</layout>
