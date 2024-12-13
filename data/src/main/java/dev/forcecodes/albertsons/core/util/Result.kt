@@ -1,4 +1,21 @@
+/**
+ * Copyright 2024 strongforce1
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package dev.forcecodes.albertsons.core.util
+
 /**
  * Used to wrap results of an operation that can be successful or unsuccessful.
  * At least one of the values (value or error) must be non-null.
@@ -8,7 +25,7 @@ package dev.forcecodes.albertsons.core.util
  */
 data class Result<out S, out F> private constructor(
     val value: S?,
-    val error: F?
+    val error: F?,
 ) {
     fun successOrNull(): S? = value
 
@@ -39,14 +56,14 @@ data class Result<out S, out F> private constructor(
     }
 
     companion object {
-
         @JvmName("success")
-        fun <S, F> success(value: S): Result<S, F> =
-            Result(value, null)
+        fun <S, F> success(value: S): Result<S, F> = Result(value, null)
 
         @JvmName("failure")
-        fun <S, F> failure(fail: F, value: S? = null): Result<S, F> =
-            Result(value, fail)
+        fun <S, F> failure(
+            fail: F,
+            value: S? = null,
+        ): Result<S, F> = Result(value, fail)
     }
 }
 
@@ -59,7 +76,7 @@ inline fun <R, F, S : R> Result<S, F>.successOrErrorAction(errorAction: (error: 
 inline fun <R, S, F> Result<S, F>.fold(
     successAction: (value: S) -> R,
     failureAction: (exception: F) -> R,
-    finally: ((Result<S, F>) -> Unit) = {}
+    finally: ((Result<S, F>) -> Unit) = {},
 ): R =
     when (val exception = error) {
         null -> successAction(value as S)

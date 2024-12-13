@@ -14,20 +14,9 @@
  * limitations under the License.
  *
  */
-package dev.forcecodes.albertsons.core.database
+package dev.forcecodes.albertsons.domain
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import dev.forcecodes.albertsons.core.di.Converters
-import dev.forcecodes.albertsons.core.local.UserInfoEntity
-
-@Database(
-    entities = [UserInfoEntity::class],
-    version = 1,
-    exportSchema = false,
-)
-@TypeConverters(Converters::class)
-abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): UserDao
+class GetRandomUsersUseCaseTest {
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
 }

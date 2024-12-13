@@ -1,3 +1,19 @@
+/**
+ * Copyright 2024 strongforce1
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package dev.forcecodes.albertsons.randomuser.presentation.view
 
 import android.os.Bundle
@@ -15,7 +31,6 @@ import kotlinx.coroutines.flow.collectLatest
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment(R.layout.fragment_conventional_xml) {
-
     private val viewModel by activityViewModels<DashboardViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,19 +38,23 @@ class DashboardFragment : Fragment(R.layout.fragment_conventional_xml) {
         viewModel.refresh(false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?,
+    ) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentConventionalXmlBinding.bind(view)
 
-        val adapter = UsersListAdapter(
-            onClick = {
-                findNavController().navigate(R.id.detailsFragment, it.toBundle())
-            },
-            requestNextPage = {
-                viewModel.refresh(true)
-            }
-        )
+        val adapter =
+            UsersListAdapter(
+                onClick = {
+                    findNavController().navigate(R.id.detailsFragment, it.toBundle())
+                },
+                requestNextPage = {
+                    viewModel.refresh(true)
+                },
+            )
 
         launchWithViewLifecycle {
             viewModel.pagingData.collectLatest {

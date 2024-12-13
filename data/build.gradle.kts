@@ -26,7 +26,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -80,6 +80,5 @@ dependencies {
     implementation(libs.androidx.paging.runtime)
 
     // I am running on M3 Pro device
-    ksp ("org.xerial:sqlite-jdbc:3.36.0")
-
+    ksp("org.xerial:sqlite-jdbc:3.36.0")
 }

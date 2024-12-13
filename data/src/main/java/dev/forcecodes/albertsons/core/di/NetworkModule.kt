@@ -1,3 +1,19 @@
+/**
+ * Copyright 2024 strongforce1
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package dev.forcecodes.albertsons.core.di
 
 import android.content.Context
@@ -10,9 +26,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.forcecodes.albertsons.core.api.interceptor.ConnectivityInterceptor
 import dev.forcecodes.albertsons.core.api.NetworkStatusProvider
 import dev.forcecodes.albertsons.core.api.RandomUserApiService
+import dev.forcecodes.albertsons.core.api.interceptor.ConnectivityInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -22,13 +38,13 @@ import retrofit2.create
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-internal val sharedMoshi = Moshi.Builder()
-    .build()
+internal val sharedMoshi =
+    Moshi.Builder()
+        .build()
 
 @Module(includes = [NetworkStatusModule::class])
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     private const val DEFAULT_TIMEOUT = 15L
     private const val CACHE_SIZE = 10 * 1024 * 1024
 
@@ -36,21 +52,20 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    internal fun provideCache(@ApplicationContext context: Context): Cache {
+    internal fun provideCache(
+        @ApplicationContext context: Context,
+    ): Cache {
         return Cache(context.cacheDir, CACHE_SIZE.toLong())
     }
 
     @Provides
     @Singleton
-    internal fun provideConnectivityInterceptor(
-        networkStatusProvider: NetworkStatusProvider
-    ): ConnectivityInterceptor = ConnectivityInterceptor(networkStatusProvider)
+    internal fun provideConnectivityInterceptor(networkStatusProvider: NetworkStatusProvider): ConnectivityInterceptor =
+        ConnectivityInterceptor(networkStatusProvider)
 
     @Provides
     @Singleton
-    internal fun providesRetrofitBuilder(
-        okHttpClient: Lazy<OkHttpClient>
-    ): Retrofit {
+    internal fun providesRetrofitBuilder(okHttpClient: Lazy<OkHttpClient>): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(sharedMoshi))
@@ -71,7 +86,7 @@ object NetworkModule {
     internal fun providesOkHttpCallFactory(
         connectivityInterceptor: ConnectivityInterceptor,
         okHttpLoggingInterceptor: HttpLoggingInterceptor,
-        cache: Cache
+        cache: Cache,
     ): OkHttpClient {
 //        return checkMainThread {
 //
@@ -88,9 +103,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesRandomUserApiService(
-        retrofit: Retrofit
-    ): RandomUserApiService = retrofit.create()
+    fun providesRandomUserApiService(retrofit: Retrofit): RandomUserApiService = retrofit.create()
 }
 
 fun <T> checkMainThread(block: () -> T): T =
@@ -104,8 +117,7 @@ fun <T> checkMainThread(block: () -> T): T =
 // We use callFactory lambda here with dagger.Lazy<Call.Factory>
 // to prevent initializing OkHttp on the main thread.
 @Suppress("NOTHING_TO_INLINE")
-inline fun Retrofit.Builder.delegatingCallFactory(
-    delegate: Lazy<OkHttpClient>
-): Retrofit.Builder = callFactory {
-    delegate.get().newCall(it)
-}
+inline fun Retrofit.Builder.delegatingCallFactory(delegate: Lazy<OkHttpClient>): Retrofit.Builder =
+    callFactory {
+        delegate.get().newCall(it)
+    }

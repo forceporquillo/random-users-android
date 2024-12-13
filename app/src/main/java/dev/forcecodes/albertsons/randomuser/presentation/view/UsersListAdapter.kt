@@ -1,3 +1,19 @@
+/**
+ * Copyright 2024 strongforce1
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package dev.forcecodes.albertsons.randomuser.presentation.view
 
 import android.view.LayoutInflater
@@ -11,31 +27,35 @@ import dev.forcecodes.albertsons.randomuser.databinding.ItemUserLayoutBinding
 import dev.forcecodes.albertsons.randomuser.extensions.executeAfter
 import kotlinx.coroutines.Dispatchers
 
-private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<UserSimpleInfo>() {
+private val DIFF_CALLBACK =
+    object : DiffUtil.ItemCallback<UserSimpleInfo>() {
+        override fun areItemsTheSame(
+            oldItem: UserSimpleInfo,
+            newItem: UserSimpleInfo,
+        ): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-    override fun areItemsTheSame(oldItem: UserSimpleInfo, newItem: UserSimpleInfo): Boolean {
-        return oldItem.id == newItem.id
+        override fun areContentsTheSame(
+            oldItem: UserSimpleInfo,
+            newItem: UserSimpleInfo,
+        ): Boolean {
+            return oldItem == newItem
+        }
     }
-
-    override fun areContentsTheSame(oldItem: UserSimpleInfo, newItem: UserSimpleInfo): Boolean {
-        return oldItem == newItem
-    }
-
-}
 
 class UsersListAdapter(
     private val onClick: (UserSimpleInfo) -> Unit,
-    private val requestNextPage: () -> Unit
-): PagingDataAdapter<UserSimpleInfo, UsersListAdapter.UsersViewHolder>(
-    DIFF_CALLBACK, workerDispatcher = Dispatchers.IO
-) {
-
+    private val requestNextPage: () -> Unit,
+) : PagingDataAdapter<UserSimpleInfo, UsersListAdapter.UsersViewHolder>(
+        DIFF_CALLBACK,
+        workerDispatcher = Dispatchers.IO,
+    ) {
     private var layoutManager: LinearLayoutManager? = null
 
     inner class UsersViewHolder(
-        private val binding: ItemUserLayoutBinding
+        private val binding: ItemUserLayoutBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(item: UserSimpleInfo) {
             binding.executeAfter {
                 uiModel = item
@@ -46,36 +66,47 @@ class UsersListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): UsersViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return UsersViewHolder(ItemUserLayoutBinding.inflate(inflater, parent, false))
     }
 
-    override fun onBindViewHolder(holder: UsersViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: UsersViewHolder,
+        position: Int,
+    ) {
         getItem(position)?.let {
             holder.bind(it)
         }
     }
 
-    private val onScrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            val layoutManager = initLayoutManagerIfNull(recyclerView)
+    private val onScrollListener =
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(
+                recyclerView: RecyclerView,
+                dx: Int,
+                dy: Int,
+            ) {
+                val layoutManager = initLayoutManagerIfNull(recyclerView)
 
-            val visibleItemCount = layoutManager.childCount
-            val totalItemCount = layoutManager.itemCount
-            val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
 
-            // simple workaround implementation that mimics the approach of paging library.
-            if (closestItemToLastPosition(totalItemCount, visibleItemCount, lastVisibleItem)) {
-                // instead of retrieving the page that links to the next cursor.
-                // we can manually hook it up by retrieving the last item
-                if (snapshot().isEmpty() && itemCount <= 0) {
-                    return
+                // simple workaround implementation that mimics the approach of paging library.
+                if (closestItemToLastPosition(totalItemCount, visibleItemCount, lastVisibleItem)) {
+                    // instead of retrieving the page that links to the next cursor.
+                    // we can manually hook it up by retrieving the last item
+                    if (snapshot().isEmpty() && itemCount <= 0) {
+                        return
+                    }
+                    requestNextPage.invoke()
                 }
-                requestNextPage.invoke()
             }
         }
-    }
 
     override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
         recyclerView.removeOnScrollListener(onScrollListener)
@@ -94,9 +125,11 @@ class UsersListAdapter(
      * [NEXT_PAGE_THRESHOLD] so it can advance the request upon reaching to the end of the list.
      */
     private fun closestItemToLastPosition(
-        totalItemCount: Int, visibleItemCount: Int, lastVisibleItem: Int
+        totalItemCount: Int,
+        visibleItemCount: Int,
+        lastVisibleItem: Int,
     ): Boolean {
-       return visibleItemCount + lastVisibleItem + NEXT_PAGE_THRESHOLD >= totalItemCount
+        return visibleItemCount + lastVisibleItem + NEXT_PAGE_THRESHOLD >= totalItemCount
     }
 
     private fun initLayoutManagerIfNull(recyclerView: RecyclerView): LinearLayoutManager {
@@ -107,7 +140,6 @@ class UsersListAdapter(
     }
 
     companion object {
-
         /**
          * Visible threshold until force reload.
          *

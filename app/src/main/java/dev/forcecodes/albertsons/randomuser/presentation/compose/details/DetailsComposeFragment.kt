@@ -1,3 +1,19 @@
+/**
+ * Copyright 2024 strongforce1
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
 package dev.forcecodes.albertsons.randomuser.presentation.compose.details
 
 import android.os.Bundle
@@ -52,7 +68,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 @AndroidEntryPoint
 class DetailsComposeFragment : Fragment() {
-
     private val viewModel: DetailsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,26 +80,27 @@ class DetailsComposeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = requireContentView(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed) {
-        MyApplicationTheme {
-            DetailsScreen(state = viewModel.userDetailsState) {
-                requireArguments().run {
-                    UserDetails(
-                        fullName = getString(UserArgsKey.FULL_NAME) ?: "",
-                        thumbnail = getString(UserArgsKey.THUMBNAIL) ?: "",
-                        email = getString(UserArgsKey.EMAIL) ?: ""
-                    )
+        savedInstanceState: Bundle?,
+    ): View =
+        requireContentView(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed) {
+            MyApplicationTheme {
+                DetailsScreen(state = viewModel.userDetailsState) {
+                    requireArguments().run {
+                        UserDetails(
+                            fullName = getString(UserArgsKey.FULL_NAME) ?: "",
+                            thumbnail = getString(UserArgsKey.THUMBNAIL) ?: "",
+                            email = getString(UserArgsKey.EMAIL) ?: "",
+                        )
+                    }
                 }
             }
         }
-    }
 }
 
 data class UserDetails(
     val fullName: String,
     val thumbnail: String,
-    val email: String
+    val email: String,
 )
 
 @Composable
@@ -98,10 +114,10 @@ fun DetailsScreen(
         is UserDetailsViewState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(
-                    color = MaterialTheme.colors.onBackground
+                    color = MaterialTheme.colors.onBackground,
                 )
             }
         }
@@ -110,26 +126,26 @@ fun DetailsScreen(
             val details = onGetDetails()
             val scrollState = rememberScrollState()
             Column(
-                modifier = Modifier.fillMaxSize()
-                    .padding(horizontal = 16.dp)
-                    .verticalScroll(scrollState)
+                modifier =
+                    Modifier.fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                        .verticalScroll(scrollState),
             ) {
                 DetailsTextSection(details)
                 UserDetailsContent(
                     title = stringResource(R.string.details_personal_information),
-                    details = viewState.userDetails
+                    details = viewState.userDetails,
                 )
                 Spacer(modifier = Modifier.size(20.dp))
                 UserDetailsContent(
                     title = stringResource(R.string.details_account_information),
                     details = viewState.loginCredentials,
-                    modifier = Modifier.padding(bottom = 20.dp)
+                    modifier = Modifier.padding(bottom = 20.dp),
                 )
             }
         }
 
         is UserDetailsViewState.Error -> {
-
         }
     }
 }
@@ -141,18 +157,18 @@ fun DetailsTextSection(details: UserDetails) {
     Spacer(modifier = Modifier.size(20.dp))
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
             text = details.fullName,
             fontSize = 24.sp,
-            style = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onBackground)
+            style = MaterialTheme.typography.h6.copy(color = MaterialTheme.colors.onBackground),
         )
         Text(
             text = details.email,
             fontWeight = FontWeight.Bold,
             fontSize = 15.sp,
-            color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f)
+            color = MaterialTheme.colors.onBackground.copy(alpha = 0.7f),
         )
     }
     Spacer(modifier = Modifier.size(20.dp))
@@ -162,20 +178,20 @@ fun DetailsTextSection(details: UserDetails) {
 fun UserDetailsContent(
     title: String,
     details: List<Pair<String, String>>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = title,
-        // since we don't define surface, we have to explicitly set the color
         color = MaterialTheme.colors.onBackground,
-        fontSize = 14.sp
+        fontSize = 14.sp,
     )
     Spacer(modifier = Modifier.size(10.dp))
     Card(
-        modifier = modifier.fillMaxWidth()
-            .padding()
-            .clip(Shapes.large),
-        elevation = 4.dp
+        modifier =
+            modifier.fillMaxWidth()
+                .padding()
+                .clip(Shapes.large),
+        elevation = 4.dp,
     ) {
         Column {
             List(details.size) { index ->
@@ -189,12 +205,13 @@ fun UserDetailsContent(
 @Composable
 fun DetailedRowContent(
     contents: Pair<String, String>,
-    showDivider: Boolean = true
+    showDivider: Boolean = true,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier =
+            Modifier.fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
             contents.first,
@@ -206,13 +223,13 @@ fun DetailedRowContent(
             textAlign = TextAlign.End,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.padding(start = 20.dp)
+            modifier = Modifier.padding(start = 20.dp),
         )
     }
     if (showDivider) {
         Divider(
             modifier = Modifier.padding(horizontal = 16.dp),
-            thickness = 1.dp
+            thickness = 1.dp,
         )
     }
 }
@@ -220,20 +237,22 @@ fun DetailedRowContent(
 @Composable
 fun HeaderProfilePhoto(
     imageUrl: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
     ) {
         AsyncImage(
             model = imageUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(120.dp)
-                .clip(CircleShape)
+            modifier =
+                Modifier
+                    .size(120.dp)
+                    .clip(CircleShape),
         )
     }
 }
@@ -242,35 +261,37 @@ fun HeaderProfilePhoto(
 @Composable
 fun DetailsScreenPreview() {
     MyApplicationTheme {
-        // Replace with a mock or your real ViewModel
         DetailsScreen(
-            state = MutableStateFlow(UserDetailsViewState.Success(
-                listOf(
-                    "Dob" to "N/A",
-                    "Age" to "N/A",
-                    "Date Registered" to "N/A",
-                    "Phone" to "N/A",
-                    "Cell" to "N/A",
-                    "Address" to "N/A",
-                    "Timezone" to "N/A"
+            state =
+                MutableStateFlow(
+                    UserDetailsViewState.Success(
+                        listOf(
+                            "Dob" to "N/A",
+                            "Age" to "N/A",
+                            "Date Registered" to "N/A",
+                            "Phone" to "N/A",
+                            "Cell" to "N/A",
+                            "Address" to "N/A",
+                            "Timezone" to "N/A",
+                        ),
+                        listOf(
+                            "UUID" to "N/A",
+                            "Username" to "N/A",
+                            "Password" to "N/A",
+                            "Salt" to "N/A",
+                            "Md5" to "N/A",
+                            "Sha1" to "N/A",
+                            "Sha256" to "N/A",
+                        ),
+                    ),
                 ),
-                listOf(
-                    "UUID" to "N/A",
-                    "Username" to "N/A",
-                    "Password" to "N/A",
-                    "Salt" to "N/A",
-                    "Md5" to "N/A",
-                    "Sha1" to "N/A",
-                    "Sha256" to "N/A"
-                )
-            )),
             onGetDetails = {
                 UserDetails(
                     fullName = "Alan Coleman",
                     email = "alan.coleman@example.com",
-                    thumbnail = "https://randomuser.me/api/portraits/thumb/men/68.jpg" // Example thumbnail URL
+                    thumbnail = "https://randomuser.me/api/portraits/thumb/men/68.jpg",
                 )
-            }
+            },
         )
     }
 }
