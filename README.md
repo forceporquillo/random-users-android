@@ -5,9 +5,11 @@
 - [x] Pagination support for loading more data.
 - [x] Offline caching of user data.
 - [x] Dark mode support.
-- [ ] Compose Version.
+- [x] Compose Version.
+- [ ] Unit test.
 
 ## Previews
+### Conventional XML
 ### Light Mode ☀️
 | <img src="previews/Screenshot_20241212_204148.png" alt="Screenshot 2" width="150"/> | <img src="previews/Screenshot_20241212_204802.png" alt="Screenshot 2" width="150"/> | <img src="previews/Screenshot_20241212_204201.png" alt="Screenshot 2" width="150"/> | 
 |-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
@@ -16,21 +18,37 @@
 ### Dark Mode 🌑
 | <img src="previews/Screenshot_20241212_204211.png" alt="Screenshot 2" width="150"/> | <img src="previews/Screenshot_20241212_204222.png" alt="Screenshot 2" width="150"/> | 
 |-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
-| <p align="center">XML Layout</p>                                                    | <p align="center">Input Random Generator</p>                                        |
+| <p align="center">XML Layout</p>                                                    | <p align="center">User Details</p>                                        |
+
+### Jetpack Compose
+### Light Mode ☀️
+| <img src="previews/Screenshot_20241213_051811.png" alt="Screenshot 2" width="150"/> | <img src="previews/Screenshot_20241213_052333.png" alt="Screenshot 2" width="150"/> | 
+|-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| <p align="center">XML Layout</p>                                                    | <p align="center">User Details</p>                                                  |
+
+### Dark Mode 🌑
+| <img src="previews/Screenshot_20241213_051823.png" alt="Screenshot 2" width="150"/> | <img src="previews/Screenshot_20241213_051829.png" alt="Screenshot 2" width="150"/> | 
+|-------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------|
+| <p align="center">XML Layout</p>                                                    | <p align="center">User Details</p>                                        |
 
 ## Technologies and Frameworks
 - **Dagger Hilt**: Dependency injection library for Android.
+- **Room**: A library for working with SQLite databases, making data persistence easier and type-safe.
 - **Retrofit**: Type-safe HTTP client for Android and Java.
+- **OkHttp**: A powerful HTTP client used for making efficient network requests and managing connections.
+- **Navigation Component**: A tool to simplify app navigation, handling transitions between screens and deep links.
+- **Paging3**:  A library that loads large datasets efficiently in a paginated way, improving performance.
+- **Coil**: A lightweight image loading library.
 - **Kotlin**: Programming language used for Android development.
 - **Coroutines**: Concurrency design pattern that you can use on Android to simplify code that executes asynchronously.
 - **Flow**: A cold asynchronous data stream that sequentially emits values and completes normally or with an exception.
-- **Android Jetpack**: Collection of libraries to help developers follow best practices and write code that works consistently across Android versions and devices.
 - **Compose**: Android’s modern toolkit for building native UI.
+- **Moshi**: A fast, efficient library for parsing and converting JSON into Kotlin objects.
 - **XML**: Conventional XML layouts for UI components.
 
 ## License
 ```text
-Copyright 2022 strongforce1
+Copyright 2024 strongforce1
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
