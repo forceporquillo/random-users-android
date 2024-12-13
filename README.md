@@ -46,6 +46,15 @@
 - **Moshi**: A fast, efficient library for parsing and converting JSON into Kotlin objects.
 - **XML**: Conventional XML layouts for UI components.
 
+## Note
+The project using [spotless](https://github.com/diffplug/spotless/tree/main/plugin-gradle) with [klint](https://github.com/pinterest/ktlint).
+Run these commands to verify and apply the formatting rules before building or running the project.
+
+```bash
+./gradlew spotlessCheck
+./gradlew spotlessApply
+```
+
 ## License
 ```text
 Copyright 2024 strongforce1
@@ -60,4 +69,6 @@ Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
-limitations under the License.```
+limitations under the License.
+```
+
